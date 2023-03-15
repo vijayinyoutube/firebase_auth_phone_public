@@ -1,6 +1,10 @@
+import 'dart:developer';
+import 'dart:html';
+
 import 'package:firebase_auth_phone_public/Firebase/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../Widgets/textfield.dart';
+import 'Adminpage.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -12,8 +16,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   TextEditingController phoneNumber = TextEditingController();
   TextEditingController otp = TextEditingController();
+
   bool canShow = false;
   var temp;
+
+  bool get confirmationResult => false;
 
   @override
   void dispose() {
@@ -56,7 +63,18 @@ class _HomePageState extends State<HomePage> {
 
   Widget buildSubmitBtn(String text) => ElevatedButton(
         onPressed: () {
-          FirebaseAuthentication().authenticateMe(temp, otp.text);
+          // if (confirmationResult == true)
+          // {
+          FirebaseAuthentication().authenticateMe(temp, otp.text).then(
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AdminPage()),
+                ),
+              );
+          //}
+          // else {
+          log("Confirmation is not valid");
+          // }
         },
         child: Text(text),
       );
